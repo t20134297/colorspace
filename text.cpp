@@ -8,10 +8,15 @@ vector<string> get_record_from_database(int position,string cameraid);
 
 int main()
 {
-	vector<string> result;
-	result = get_record_from_database(300,"first");
-	for(int i=0;i<result.size();i=i+1)
-		cout<<result[i]<<endl;
+	int top[5]={1,2,3,4,5};
+	for(int i=0;i<5;i=i+1)
+	{
+		cout<<top[i]<<endl;
+	}
+	// vector<string> result;
+	// result = get_record_from_database(300,"first");
+	// for(int i=0;i<result.size();i=i+1)
+	// 	cout<<result[i]<<endl;
 
 
 	// vector<string> temp_result;
@@ -151,58 +156,4 @@ int main()
  //
  // cout<<haha<<endl;
 	return 0;
-}
-
-vector<string> get_record_from_database(int position,string cameraid)
-{
-	vector<string> temp_result;
-	vector<string> final_result;
-	string sql = "select * from ReId where start<";
-	sql = sql+to_string(position) +" and end > " +to_string(position)+" and cameraId = "+"'"+cameraid+"'"+" ;";
-	cout<<sql<<endl;
-
-	MYSQL mysql;
-	mysql_init(&mysql);
-	mysql_real_connect(&mysql,"localhost","root","neuadmin","first",3306,NULL,0);
-
-	mysql_query(&mysql,sql.c_str());
-	MYSQL_RES *result = NULL;
-	result = mysql_store_result(&mysql);
-
-	MYSQL_ROW row = NULL;
-	row = mysql_fetch_row(result);
-	while(NULL != row)
-	{
-		for(int i=1;i<6;i=i+1)
-		{
-			cout<<"in get_record_from_database function:  "<<row[i]<<endl;
-			temp_result.push_back(row[i]);
-		}
-		row = mysql_fetch_row(result);
-	}
-
-	mysql_free_result(result);
-	mysql_close(&mysql);
-
-	final_result.push_back(temp_result[0]);
-	bool readd=false;
-	cout<<endl<<endl;
-	for(int i=1;i<temp_result.size();i=i+1)
-	{
-		readd=false;
-		for(int j=0;j<final_result.size();j=j+1)
-		{
-			if(temp_result[i] == final_result[j])
-			{
-				readd = true;
-			}
-		}
-		if (!readd)
-		{
-			final_result.push_back(temp_result[i]);
-		}
-
-	}
-	
-	return final_result;
 }
